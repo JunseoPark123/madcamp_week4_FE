@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://naver.jfrog.io/artifactory/maven/")
         gradlePluginPortal()
     }
 }
@@ -10,6 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://devrepo.kakao.com/nexus/content/groups/public/")
     }
 }
 
