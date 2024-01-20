@@ -13,6 +13,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp_week4_fe.models.Item
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
@@ -26,17 +31,19 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        Log.d("HomeFragment", "onCreateView: RecyclerView setup initiated.")
         setupRecyclerView()
+        Log.d("HomeFragment", "onCreateView: Loading gallery data.")
         loadGalleryData()
 
         return binding.root
     }
 
     private fun setupRecyclerView() {
-        locationInfoAdapter = LocationInfoAdapter(locationInfoItems)
+        locationInfoAdapter = LocationInfoAdapter(locationInfoItems, requireContext())
         binding.locationInfoRecycler.adapter = locationInfoAdapter
         binding.locationInfoRecycler.layoutManager = LinearLayoutManager(context)
+        Log.d("HomeFragment", "RecyclerView setup completed.")
     }
 
     private fun loadGalleryData() {
@@ -44,35 +51,35 @@ class HomeFragment : Fragment() {
 
         Log.d("HomeFragment", "API 호출 시작")
 
-        service.getGalleryList().enqueue(object : Callback<GalleryResponse> {
-            override fun onResponse(
-                call: Call<GalleryResponse>,
-                response: Response<GalleryResponse>
-            ) {
-                Log.d("HomeFragment", "API 응답 수신: ${response.isSuccessful}")
-
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = service.getGalleryList().execute() // 동기 호출
                 if (response.isSuccessful) {
-                    val items = response.body()?.response?.body?.items?.item
-                    items?.let {
-                        locationInfoItems.clear()
-                        locationInfoItems.addAll(it.map { galleryItem ->
-                            LocationInfoItem(
-                                galleryItem.galWebImageUrl,
-                                galleryItem.galTitle,
-                                galleryItem.galPhotographyLocation,
-                                galleryItem.galSearchKeyword
-                            )
-                        })
-                        locationInfoAdapter.notifyDataSetChanged()
-                    } ?: Log.d("HomeFragment", "응답 항목이 null입니다")
+                    // 메인 스레드로 전환하여 UI 업데이트
+                    withContext(Dispatchers.Main) {
+                        response.body()?.response?.body?.items?.item?.let { items ->
+                            updateUI(items)
+                        }
+                    }
                 } else {
                     Log.d("HomeFragment", "API 응답 실패: ${response.code()} - ${response.message()}")
                 }
+            } catch (e: Exception) {
+                Log.d("HomeFragment", "API 호출 실패: ${e.message}")
             }
+        }
+    }
 
-            override fun onFailure(call: Call<GalleryResponse>, t: Throwable) {
-                Log.d("HomeFragment", "API 호출 실패: ${t.message}")
-            }
+    private fun updateUI(items: List<Item>) {
+        locationInfoItems.clear()
+        locationInfoItems.addAll(items.map { galleryItem ->
+            LocationInfoItem(
+                galleryItem.galWebImageUrl,
+                galleryItem.galTitle,
+                galleryItem.galPhotographyLocation,
+                galleryItem.galSearchKeyword
+            )
         })
+        locationInfoAdapter.notifyDataSetChanged()
     }
 }
