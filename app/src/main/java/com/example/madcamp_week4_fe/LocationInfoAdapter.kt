@@ -19,7 +19,7 @@ class LocationInfoAdapter(private val items: MutableList<LocationInfoItem>)
         fun bind(item: LocationInfoItem) {
             binding.tvGalTitle.text = item.galTitle
             binding.tvGalLocation.text = item.galLocation
-            binding.tvGalTag.text = item.galTag
+            binding.tvGalKeyword.text = item.galKeyword
         }
     }
 
@@ -30,6 +30,7 @@ class LocationInfoAdapter(private val items: MutableList<LocationInfoItem>)
 
     override fun onBindViewHolder(holder: LocationInfoViewHolder, position: Int) {
         val item = items[position]
+        holder.bind(item)
     }
 
     override fun getItemCount() = items.size

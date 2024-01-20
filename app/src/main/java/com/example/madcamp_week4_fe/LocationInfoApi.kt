@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object RetrofitClient {
+object LocationInfoApi {
     private var instance: Retrofit? = null
     private const val CONNECT_TIMEOUT_SEC = 20000L
 
@@ -24,7 +24,7 @@ object RetrofitClient {
                 .build()
 
             instance = Retrofit.Builder()
-                .baseUrl("http://ec2-3-34-151-36.ap-northeast-2.compute.amazonaws.com/")
+                .baseUrl("http://apis.data.go.kr/B551011/PhotoGalleryService1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client) // Retrofit 객체에 OkHttpClient 적용
                 .build()
