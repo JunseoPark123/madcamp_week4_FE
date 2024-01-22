@@ -4,11 +4,12 @@ import com.example.madcamp_week4_fe.models.GalleryResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.net.URLDecoder
 
 interface LocationApiService {
     @GET("galleryList1")
     fun getGalleryList(
-        @Query("serviceKey") serviceKey: String = "6pV0A29OuVqdGtWqISMIRMBb6pYP1tNsoRedxnuuQK5zyhlzSGmtjOHfDfx979w56FJVwhfWxiRgsZRh61Dbfw%3D%3D",
+        @Query("serviceKey") serviceKey: String = URLDecoder.decode("6pV0A29OuVqdGtWqISMIRMBb6pYP1tNsoRedxnuuQK5zyhlzSGmtjOHfDfx979w56FJVwhfWxiRgsZRh61Dbfw%3D%3D", "UTF-8"),
         @Query("numOfRows") numOfRows: Int = 10,
         @Query("pageNo") pageNo: Int = 1,
         @Query("MobileOS") mobileOS: String = "AND",

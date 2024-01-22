@@ -56,6 +56,8 @@ class HomeFragment : Fragment() {
                 val response = service.getGalleryList().execute() // 동기 호출
                 if (response.isSuccessful) {
                     // 메인 스레드로 전환하여 UI 업데이트
+
+                    Log.d("HomeFragment", "API 호출 성공: ${response.body()}")
                     withContext(Dispatchers.Main) {
                         response.body()?.response?.body?.items?.item?.let { items ->
                             updateUI(items)
