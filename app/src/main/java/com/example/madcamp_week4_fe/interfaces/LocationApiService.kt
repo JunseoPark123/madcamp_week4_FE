@@ -11,10 +11,13 @@ interface LocationApiService {
     fun getGalleryList(
         @Query("serviceKey") serviceKey: String = URLDecoder.decode("6pV0A29OuVqdGtWqISMIRMBb6pYP1tNsoRedxnuuQK5zyhlzSGmtjOHfDfx979w56FJVwhfWxiRgsZRh61Dbfw%3D%3D", "UTF-8"),
         @Query("numOfRows") numOfRows: Int = 10,
-        @Query("pageNo") pageNo: Int = 1,
+        @Query("pageNo") pageNo: Int = 17,
         @Query("MobileOS") mobileOS: String = "AND",
         @Query("MobileApp") mobileApp: String = "AppTest",
         @Query("arrange") arrange: String = "A",
         @Query("_type") type: String = "json"
     ): Call<GalleryResponse>
+
+
+
 }

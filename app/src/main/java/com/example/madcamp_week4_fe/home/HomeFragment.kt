@@ -1,4 +1,4 @@
-package com.example.madcamp_week4_fe
+package com.example.madcamp_week4_fe.home
 
 import android.app.Activity
 import android.content.Intent
@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import android.location.Geocoder
 import androidx.lifecycle.ViewModelProvider
+import com.example.madcamp_week4_fe.home.MapResetLoadingActivity
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -54,7 +55,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         map.uiSettings.isZoomGesturesEnabled = true
 
         Log.d("HomeFragment", "Starting LoadingActivity.")
-        val intent = Intent(context, LoadingActivity::class.java)
+        val intent = Intent(context, MapResetLoadingActivity::class.java)
         loadingActivityResultLauncher.launch(intent)
 
         context?.let {

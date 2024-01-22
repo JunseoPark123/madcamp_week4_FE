@@ -1,12 +1,14 @@
 package com.example.madcamp_week4_fe
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.madcamp_week4_fe.analysis.AnalysisFragment
 import com.example.madcamp_week4_fe.databinding.ActivityMainBinding
+import com.example.madcamp_week4_fe.home.HomeFragment
+import com.example.madcamp_week4_fe.search.SearchFragment
 
 
 const val TAG_HEART = "heart_fragment"
@@ -27,9 +29,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.navigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.heart -> setFragment(TAG_HEART, HeartFragment())
+                R.id.heart -> setFragment(TAG_HEART, SearchFragment())
                 R.id.home -> setFragment(TAG_HOME, HomeFragment())
-                R.id.mypage -> setFragment(TAG_MYPAGE, MypageFragment())
+                R.id.mypage -> setFragment(TAG_MYPAGE, AnalysisFragment())
             }
             true
         }
@@ -45,9 +47,9 @@ class MainActivity : AppCompatActivity() {
             currentFragment
         } else {
             when (tag) {
-                TAG_HEART -> HeartFragment()
+                TAG_HEART -> SearchFragment()
                 TAG_HOME -> HomeFragment()
-                TAG_MYPAGE -> MypageFragment()
+                TAG_MYPAGE -> AnalysisFragment()
                 else -> HomeFragment()
             }
         }
@@ -77,9 +79,9 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateToFragment(tag: String) {
         setFragment(tag, when (tag) {
-            TAG_HEART -> HeartFragment()
+            TAG_HEART -> SearchFragment()
             TAG_HOME -> HomeFragment()
-            TAG_MYPAGE -> MypageFragment()
+            TAG_MYPAGE -> AnalysisFragment()
             else -> HomeFragment()
         })
         binding.navigationView.selectedItemId = when (tag) {

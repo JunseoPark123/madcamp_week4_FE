@@ -19,7 +19,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".LoadingActivity"
+            android:name=".ready.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ready.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.MapResetLoadingActivity"
             android:exported="false" />
 
         <meta-data
@@ -27,7 +33,7 @@
             android:value="AIzaSyB8NCOlYUBOtRcq8tToYdht5b-lhWpwbjM" />
 
         <activity
-            android:name=".GalleryActivity"
+            android:name=".search.GalleryActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

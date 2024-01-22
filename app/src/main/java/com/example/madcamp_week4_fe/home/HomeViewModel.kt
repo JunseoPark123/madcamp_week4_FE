@@ -1,9 +1,10 @@
-package com.example.madcamp_week4_fe
+package com.example.madcamp_week4_fe.home
 
 
 import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.madcamp_week4_fe.LocationInfoApi
 import com.example.madcamp_week4_fe.interfaces.LocationApiService
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
