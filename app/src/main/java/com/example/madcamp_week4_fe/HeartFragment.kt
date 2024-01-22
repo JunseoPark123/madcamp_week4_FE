@@ -10,6 +10,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import android.location.Geocoder
+import com.example.madcamp_week4_fe.interfaces.LocationApiService
+import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HeartFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentHeartBinding? = null
@@ -26,9 +33,27 @@ class HeartFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         val southKorea = LatLng(36.0, 128.0) // 남한의 대략적인 중심 좌표
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(southKorea, 6.0f)) // 지도 줌 레벨 설정
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(southKorea, 7.0f)) // 지도 줌 레벨 설정
+        addMarkersToMap()
     }
 
+    private fun addMarkersToMap() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val context = context ?: return@launch
+            val geocoder = Geocoder(context)
+            val service = LocationInfoApi.getInstance().create(LocationApiService::class.java)
+            val response = service.getGalleryList().execute()
+            response.body()?.response?.body?.items?.item?.forEach { galleryItem ->
+                val location = geocoder.getFromLocationName(galleryItem.galPhotographyLocation, 1)
+                location?.firstOrNull()?.let {
+                    val markerOptions = MarkerOptions().position(LatLng(it.latitude, it.longitude)).title(galleryItem.galTitle)
+                    withContext(Dispatchers.Main) {
+                        map.addMarker(markerOptions)
+                    }
+                }
+            }
+        }
+    }
     override fun onResume() {
         super.onResume()
         binding.mapView.onResume()
