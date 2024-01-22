@@ -6,77 +6,82 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.madcamp_week4_fe.databinding.FragmentHeartBinding
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import android.location.Geocoder
 import com.example.madcamp_week4_fe.interfaces.LocationApiService
-import com.google.android.gms.maps.model.MarkerOptions
+import com.example.madcamp_week4_fe.models.GalleryResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp_week4_fe.models.Item
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HeartFragment : Fragment(), OnMapReadyCallback {
-    private var _binding: FragmentHeartBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var map: GoogleMap
+class HeartFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentHeartBinding.inflate(inflater, container, false)
-        binding.mapView.onCreate(savedInstanceState)
-        binding.mapView.getMapAsync(this)
+    private lateinit var binding: FragmentHeartBinding
+    private val locationInfoItems = mutableListOf<LocationInfoItem>()
+    private lateinit var locationInfoAdapter: LocationInfoAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentHeartBinding.inflate(inflater, container, false)
+        Log.d("HeartFragment", "onCreateView: RecyclerView setup initiated.")
+        setupRecyclerView()
+        Log.d("HeartFragment", "onCreateView: Loading gallery data.")
+        loadGalleryData()
+
         return binding.root
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        val southKorea = LatLng(36.0, 128.0) // 남한의 대략적인 중심 좌표
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(southKorea, 7.0f)) // 지도 줌 레벨 설정
-        addMarkersToMap()
+    private fun setupRecyclerView() {
+        locationInfoAdapter = LocationInfoAdapter(locationInfoItems, requireContext())
+        binding.locationInfoRecycler.adapter = locationInfoAdapter
+        binding.locationInfoRecycler.layoutManager = LinearLayoutManager(context)
+        Log.d("HeartFragment", "RecyclerView setup completed.")
     }
 
-    private fun addMarkersToMap() {
+    private fun loadGalleryData() {
+        val service = LocationInfoApi.getInstance().create(LocationApiService::class.java)
+
+        Log.d("HeartFragment", "API 호출 시작")
+
         CoroutineScope(Dispatchers.IO).launch {
-            val context = context ?: return@launch
-            val geocoder = Geocoder(context)
-            val service = LocationInfoApi.getInstance().create(LocationApiService::class.java)
-            val response = service.getGalleryList().execute()
-            response.body()?.response?.body?.items?.item?.forEach { galleryItem ->
-                val location = geocoder.getFromLocationName(galleryItem.galPhotographyLocation, 1)
-                location?.firstOrNull()?.let {
-                    val markerOptions = MarkerOptions().position(LatLng(it.latitude, it.longitude)).title(galleryItem.galTitle)
+            try {
+                val response = service.getGalleryList().execute() // 동기 호출
+                if (response.isSuccessful) {
+                    // 메인 스레드로 전환하여 UI 업데이트
+
+                    Log.d("HeartFragment", "API 호출 성공: ${response.body()}")
                     withContext(Dispatchers.Main) {
-                        map.addMarker(markerOptions)
+                        response.body()?.response?.body?.items?.item?.let { items ->
+                            updateUI(items)
+                        }
                     }
+                } else {
+                    Log.d("HeartFragment", "API 응답 실패: ${response.code()} - ${response.message()}")
                 }
+            } catch (e: Exception) {
+                Log.d("HeartFragment", "API 호출 실패: ${e.message}")
             }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        binding.mapView.onResume()
-    }
 
-    override fun onPause() {
-        super.onPause()
-        binding.mapView.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.mapView.onDestroy()
-        _binding = null
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        binding.mapView.onLowMemory()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        binding.mapView.onSaveInstanceState(outState)
+    private fun updateUI(items: List<Item>) {
+        locationInfoItems.clear()
+        locationInfoItems.addAll(items.map { galleryItem ->
+            LocationInfoItem(
+                galleryItem.galWebImageUrl,
+                galleryItem.galTitle,
+                galleryItem.galPhotographyLocation,
+                galleryItem.galSearchKeyword
+            )
+        })
+        locationInfoAdapter.notifyDataSetChanged()
     }
 }
