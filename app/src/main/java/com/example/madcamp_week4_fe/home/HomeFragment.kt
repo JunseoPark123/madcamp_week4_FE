@@ -114,6 +114,21 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         context?.let { nonNullContext ->
             viewModel.addMarkersToMap(nonNullContext, map, Geocoder(nonNullContext))
         }
+
+        map.setOnMarkerClickListener { marker ->
+            Log.d("HomeFragment", "Marker clicked: ${marker.title}")
+
+            val markerDataList = viewModel.findMarkerDataByTitle(marker.title)
+            Log.d("HomeFragment", "Marker data list: $markerDataList")
+
+            if (!markerDataList.isNullOrEmpty()) {
+                val bottomSheetFragment = MarkerBottomSheetFragment.newInstance(markerDataList)
+                bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
+            } else {
+                Log.d("HomeFragment", "No marker data found for title: ${marker.title}")
+            }
+            true
+        }
     }
 
     override fun onResume() {

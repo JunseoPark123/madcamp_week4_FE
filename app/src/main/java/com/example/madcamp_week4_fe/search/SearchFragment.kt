@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.madcamp_week4_fe.databinding.FragmentSearchBinding
 import com.example.madcamp_week4_fe.interfaces.LocationApiService
 import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.madcamp_week4_fe.search.SearchInfoAdapter
-import com.example.madcamp_week4_fe.LocationInfoApi
+import com.example.madcamp_week4_fe.interfaces.LocationInfoApi
 import com.example.madcamp_week4_fe.models.Item
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

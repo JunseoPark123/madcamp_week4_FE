@@ -1,4 +1,4 @@
-package com.example.madcamp_week4_fe
+package com.example.madcamp_week4_fe.interfaces
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
