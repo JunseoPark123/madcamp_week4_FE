@@ -118,14 +118,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         map.setOnMarkerClickListener { marker ->
             Log.d("HomeFragment", "Marker clicked: ${marker.title}")
 
-            val markerDataList = viewModel.findMarkerDataByTitle(marker.title)
+            val markerDataList = viewModel.findMarkerDataByPosition(marker.position)
             Log.d("HomeFragment", "Marker data list: $markerDataList")
 
-            if (!markerDataList.isNullOrEmpty()) {
+            if (markerDataList.isNotEmpty()) {
                 val bottomSheetFragment = MarkerBottomSheetFragment.newInstance(markerDataList)
                 bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
             } else {
-                Log.d("HomeFragment", "No marker data found for title: ${marker.title}")
+                Log.d("HomeFragment", "No marker data found for position: ${marker.position}")
             }
             true
         }

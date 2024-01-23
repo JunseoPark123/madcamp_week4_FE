@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.abs
 
 class HomeViewModel : ViewModel() {
     private var markerDataList: MutableList<MarkerData> = mutableListOf()
@@ -79,9 +80,15 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun findMarkerDataByTitle(title: String): List<MarkerData>? {
-        Log.d("HomeViewModel", "findMarkerDataByTitle called with title: $title")
-        return markerDataList.filter { it.galTitle == title }
+
+    fun findMarkerDataByPosition(position: LatLng?): List<MarkerData> {
+        if (position == null) return emptyList()
+
+        return markerDataList.filter {
+            // 위치가 비슷한지 확인
+            abs(it.position.latitude - position.latitude) < 0.00001 &&
+                    abs(it.position.longitude - position.longitude) < 0.00001
+        }
     }
 }
 
