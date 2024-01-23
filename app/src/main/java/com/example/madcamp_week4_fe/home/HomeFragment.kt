@@ -43,7 +43,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
+        startLoadingActivity()
         return binding.root
+    }
+    private fun startLoadingActivity() {
+        val intent = Intent(context, MapResetLoadingActivity::class.java)
+        loadingActivityResultLauncher.launch(intent)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -54,13 +59,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isZoomGesturesEnabled = true
 
-        Log.d("HomeFragment", "Starting LoadingActivity.")
-        val intent = Intent(context, MapResetLoadingActivity::class.java)
-        loadingActivityResultLauncher.launch(intent)
-
         context?.let {
             viewModel.addMarkersToMap(map, Geocoder(it))
         }
+    }
+    private fun onDataLoaded() {
+        // 로딩 화면 종료
+        loadingActivityResultLauncher.launch(Intent(context, MapResetLoadingActivity::class.java))
     }
 
     override fun onResume() {
