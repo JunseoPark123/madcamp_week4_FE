@@ -55,11 +55,33 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d("HomeFragment", "onCreateView: Starting.")
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        binding.btnReset.setOnClickListener {
+            startLoadingActivity()
+            map.clear() // Clear existing markers
+            context?.let {
+                viewModel.addMarkersToMap(map, Geocoder(it))
+            }
+        }
+
+        binding.btnMore.setOnClickListener {
+            context?.let { nonNullContext ->
+                startAddLoadingActivity()
+                viewModel.addMoreMarkersToMap(map, Geocoder(nonNullContext))
+            }
+        }
+
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
         startLoadingActivity()
         return binding.root
     }
+
+    private fun startAddLoadingActivity() {
+        val intent = Intent(context, MapAddLoadingActivity::class.java)
+        loadingActivityResultLauncher.launch(intent)
+    }
+
     private fun startLoadingActivity() {
         val intent = Intent(context, MapResetLoadingActivity::class.java)
         loadingActivityResultLauncher.launch(intent)
@@ -73,13 +95,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isZoomGesturesEnabled = true
 
-        context?.let {
-            viewModel.addMarkersToMap(map, Geocoder(it))
+        context?.let { nonNullContext ->
+            viewModel.addMarkersToMap(map, Geocoder(nonNullContext))
         }
-    }
-    private fun onDataLoaded() {
-        // 로딩 화면 종료
-        loadingActivityResultLauncher.launch(Intent(context, MapResetLoadingActivity::class.java))
     }
 
     override fun onResume() {

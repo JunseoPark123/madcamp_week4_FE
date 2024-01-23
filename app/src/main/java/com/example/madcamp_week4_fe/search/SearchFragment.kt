@@ -45,7 +45,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun loadGalleryData() {
-        val randomPageNo = (1..150).random()
+        val randomPageNo = (1..100).random()
 
         Log.d("searchFragment", "API 호출 시작")
 

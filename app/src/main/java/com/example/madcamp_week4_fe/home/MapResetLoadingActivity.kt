@@ -18,8 +18,8 @@ class MapResetLoadingActivity : AppCompatActivity() {
             Log.d("MapResetLoadingActivity", "Closing immediately")
             closeLoading()
         } else {
-            Log.d("MapResetLoadingActivity", "Waiting 3 seconds before closing")
-            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 6000) // 3 seconds delay
+            Log.d("MapResetLoadingActivity", "Waiting 5 seconds before closing")
+            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 5000) // 3 seconds delay
         }
     }
 

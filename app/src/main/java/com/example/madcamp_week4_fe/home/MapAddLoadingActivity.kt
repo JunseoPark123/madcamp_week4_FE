@@ -5,21 +5,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.example.madcamp_week4_fe.R
 
 class MapAddLoadingActivity : AppCompatActivity() {
-    private val delay = 5000L //
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map_add_loading)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            finishLoading()
-        }, delay)
+        val shouldCloseImmediately = intent.getBooleanExtra("close", false)
+        if (shouldCloseImmediately) {
+            Log.d("MapAddLoadingActivity", "Closing immediately")
+            closeLoading()
+        } else {
+            Log.d("MapAddLoadingActivity", "Waiting 5 seconds before closing")
+            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 5000) // 3 seconds delay
+        }
     }
 
-    private fun finishLoading() {
-        setResult(Activity.RESULT_OK) // 결과 설정
-        finish() // Activity 종료
+    private fun closeLoading() {
+        setResult(Activity.RESULT_OK) // Set result
+        finish() // Finish Activity
     }
+
+
 }
