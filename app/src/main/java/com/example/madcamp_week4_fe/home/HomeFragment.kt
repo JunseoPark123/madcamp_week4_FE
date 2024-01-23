@@ -2,6 +2,7 @@ package com.example.madcamp_week4_fe.home
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +12,13 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.madcamp_week4_fe.R
 import com.example.madcamp_week4_fe.databinding.FragmentHomeBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -59,15 +62,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         binding.btnReset.setOnClickListener {
             startLoadingActivity()
             map.clear() // Clear existing markers
-            context?.let {
-                viewModel.addMarkersToMap(map, Geocoder(it))
+            context?.let { nonNullContext ->
+                viewModel.addMarkersToMap(nonNullContext, map, Geocoder(nonNullContext))
             }
         }
 
         binding.btnMore.setOnClickListener {
             context?.let { nonNullContext ->
                 startAddLoadingActivity()
-                viewModel.addMoreMarkersToMap(map, Geocoder(nonNullContext))
+                viewModel.addMarkersToMap(nonNullContext, map, Geocoder(nonNullContext))
             }
         }
 
@@ -90,13 +93,26 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d("HomeFragment", "onMapReady: Starting.")
         map = googleMap
+        try {
+            val success = map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(), R.raw.style_json // 'style_json'은 당신의 JSON 파일 이름입니다.
+                )
+            )
+            if (!success) {
+                Log.e("MapsActivity", "스타일 파싱 실패")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("MapsActivity", "스타일 리소스를 찾을 수 없음", e)
+        }
+
         val southKorea = LatLng(36.0, 128.0)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(southKorea, 7.0f))
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isZoomGesturesEnabled = true
 
         context?.let { nonNullContext ->
-            viewModel.addMarkersToMap(map, Geocoder(nonNullContext))
+            viewModel.addMarkersToMap(nonNullContext, map, Geocoder(nonNullContext))
         }
     }
 

@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/heart"
-        android:icon="@drawable/heart"
+        android:icon="@drawable/search"
         android:title="검색"
         android:enabled="true"
         />
     <item
         android:id="@+id/home"
-        android:icon="@drawable/home"
-        android:title="홈"
+        android:icon="@drawable/fullmoon"
+        android:title="집"
         android:enabled="true"
         />
     <item
         android:id="@+id/mypage"
-        android:icon="@drawable/mypage"
-        android:title="분석"
+        android:icon="@drawable/bookmark"
+        android:title="모아보기"
         android:enabled="true"
         />
 
