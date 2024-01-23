@@ -45,13 +45,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun loadGalleryData() {
-        val service = LocationInfoApi.getInstance().create(LocationApiService::class.java)
+        val randomPageNo = (1..150).random()
 
         Log.d("searchFragment", "API 호출 시작")
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = service.getGalleryList().execute() // 동기 호출
+                val service = LocationInfoApi.getInstance().create(LocationApiService::class.java)
+                val response = service.getGalleryList(pageNo = randomPageNo).execute() // 동기 호출
                 if (response.isSuccessful) {
                     // 메인 스레드로 전환하여 UI 업데이트
 

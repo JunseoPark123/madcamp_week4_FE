@@ -2,6 +2,7 @@ package com.example.madcamp_week4_fe.home
 
 import android.app.Activity
 import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp_week4_fe.databinding.FragmentHomeBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import android.location.Geocoder
-import androidx.lifecycle.ViewModelProvider
-import com.example.madcamp_week4_fe.home.MapResetLoadingActivity
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -36,6 +35,21 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        viewModel.isDataLoaded.observe(this) { isLoaded ->
+            if (isLoaded) {
+                Log.d("HomeFragment", "Data Loaded: Closing Loading Activity")
+                // Close the LoadingActivity
+                requireActivity().runOnUiThread {
+                    loadingActivityResultLauncher.launch(
+                        Intent(
+                            context,
+                            MapResetLoadingActivity::class.java
+                        ).putExtra("close", true)
+                    )
+                }
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
