@@ -3,17 +3,139 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/locationInfoRecycler"
+    <!-- Horizontal Guideline at 6% of the screen height -->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_start1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.24" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_end1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40" />
+
+
+    <!-- Vertical Guideline at 5% of the screen width -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <!-- Vertical Guideline at 95% of the screen width -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_start1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <!-- Vertical Guideline at 95% of the screen width -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_end1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <!-- View with border -->
+    <View
+        android:id="@+id/viewBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/border_rectangle"
+        app:layout_constraintTop_toTopOf="@id/guideline_horizontal_start"
+        app:layout_constraintBottom_toTopOf="@id/guideline_horizontal_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
+        app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end" />
 
+    <!-- TextView above the View -->
+    <TextView
+        android:id="@+id/Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="-20dp"
+        android:background="@android:color/white"
+        android:padding="8dp"
+        android:textSize="14dp"
+        android:text="Label"
+        app:layout_constraintBottom_toTopOf="@id/viewBorder"
+        app:layout_constraintStart_toStartOf="@id/viewBorder" />
+
+    <ImageView
+        android:id="@+id/ivCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal_end"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintTop_toTopOf="@+id/viewBorder"
+        app:srcCompat="@drawable/cancel" />
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@null"
+        android:hint="검색어 입력하기"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_start"
+        app:layout_constraintTop_toTopOf="@+id/viewBorder" />
+
+    <View
+        android:id="@+id/viewSearchPicture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_search_picture"
+        app:layout_constraintTop_toTopOf="@id/guideline_horizontal_start1"
+        app:layout_constraintBottom_toTopOf="@id/guideline_horizontal_end1"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical_start1"
+        app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end1" />
+
+    <TextView
+        android:id="@+id/tvSearchPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="가고싶은 여행지의 \n 사진을 이용하여 검색하세요."
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal_end1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_start1"
+        app:layout_constraintTop_toTopOf="@+id/guideline_horizontal_start1"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

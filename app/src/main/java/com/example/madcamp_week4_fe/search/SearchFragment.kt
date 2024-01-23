@@ -29,20 +29,20 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
-        Log.d("searchFragment", "onCreateView: RecyclerView setup initiated.")
-        setupRecyclerView()
-        Log.d("searchFragment", "onCreateView: Loading gallery data.")
-        loadGalleryData()
+//        Log.d("searchFragment", "onCreateView: RecyclerView setup initiated.")
+//        setupRecyclerView()
+//        Log.d("searchFragment", "onCreateView: Loading gallery data.")
+//        loadGalleryData()
 
         return binding.root
     }
 
-    private fun setupRecyclerView() {
-        searchInfoAdapter = SearchInfoAdapter(searchInfoItems, requireContext())
-        binding.locationInfoRecycler.adapter = searchInfoAdapter
-        binding.locationInfoRecycler.layoutManager = LinearLayoutManager(context)
-        Log.d("searchFragment", "RecyclerView setup completed.")
-    }
+//    private fun setupRecyclerView() {
+//        searchInfoAdapter = SearchInfoAdapter(searchInfoItems, requireContext())
+//        binding.locationInfoRecycler.adapter = searchInfoAdapter
+//        binding.locationInfoRecycler.layoutManager = LinearLayoutManager(context)
+//        Log.d("searchFragment", "RecyclerView setup completed.")
+//    }
 
     private fun loadGalleryData() {
         val randomPageNo = (1..100).random()
