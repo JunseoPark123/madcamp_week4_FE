@@ -15,24 +15,24 @@
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="Google Map View" />
 
-    <Button
+    <ImageView
         android:id="@+id/btnMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
-        android:text="More"
         app:layout_constraintEnd_toEndOf="@+id/mapView"
-        app:layout_constraintTop_toTopOf="@+id/mapView" />
+        app:layout_constraintTop_toTopOf="@+id/mapView"
+        android:src="@drawable/btnadd"/>
 
-    <Button
+    <ImageView
         android:id="@+id/btnReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
-        android:text="Reset"
         app:layout_constraintStart_toStartOf="@+id/mapView"
-        app:layout_constraintTop_toTopOf="@+id/mapView" />
+        app:layout_constraintTop_toTopOf="@+id/mapView"
+        android:src="@drawable/btnreset"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
