@@ -19,7 +19,7 @@ class MapAddLoadingActivity : AppCompatActivity() {
             closeLoading()
         } else {
             Log.d("MapAddLoadingActivity", "Waiting 5 seconds before closing")
-            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 5000) // 3 seconds delay
+            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 7000) // 3 seconds delay
         }
     }
 

@@ -14,9 +14,9 @@ class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_marker_bottom_sheet, container, false)
-        val viewPager: ViewPager = view.findViewById(R.id.viewPager)
+        val viewPager: ViewPager2 = view.findViewById(R.id.viewPager)
 
-        viewPager.adapter = MarkerPagerAdapter(childFragmentManager, markerDataList)
+        viewPager.adapter = MarkerPagerAdapter(markerDataList)
 
         return view
     }
@@ -24,8 +24,17 @@ class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
         fun newInstance(markerDataList: List<MarkerData>): MarkerBottomSheetFragment {
             val fragment = MarkerBottomSheetFragment()
-            fragment.markerDataList = markerDataList
+            val args = Bundle()
+            args.putParcelableArrayList("markerDataList", ArrayList(markerDataList))
+            fragment.arguments = args
             return fragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            markerDataList = it.getParcelableArrayList<MarkerData>("markerDataList") ?: listOf()
         }
     }
 }
