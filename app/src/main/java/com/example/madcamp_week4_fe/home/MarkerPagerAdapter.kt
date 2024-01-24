@@ -38,7 +38,24 @@ class MarkerPagerAdapter(
 
             itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
                 val newFavoriteStatus = !isFavorite
-                sharedPreferences.edit().putBoolean(markerData.galTitle, newFavoriteStatus).apply()
+                val editor = sharedPreferences.edit()
+                editor.putBoolean(markerData.galTitle, newFavoriteStatus)
+                if (newFavoriteStatus) {
+                    // Save additional details when marked as favorite
+                    editor.putString(markerData.galTitle + "_url", markerData.galUrl)
+                    editor.putString(markerData.galTitle + "_location", markerData.galLocation)
+                    editor.putString(markerData.galTitle + "_keyword", markerData.galKeyword)
+                    editor.putFloat(markerData.galTitle + "_lat", markerData.position.latitude.toFloat())
+                    editor.putFloat(markerData.galTitle + "_lng", markerData.position.longitude.toFloat())
+                } else {
+                    // Remove saved details when unmarked as favorite
+                    editor.remove(markerData.galTitle + "_url")
+                    editor.remove(markerData.galTitle + "_location")
+                    editor.remove(markerData.galTitle + "_keyword")
+                    editor.remove(markerData.galTitle + "_lat")
+                    editor.remove(markerData.galTitle + "_lng")
+                }
+                editor.apply()
                 ivFavor.setImageResource(if (newFavoriteStatus) R.drawable.fillfavor else R.drawable.favor)
             }
 
