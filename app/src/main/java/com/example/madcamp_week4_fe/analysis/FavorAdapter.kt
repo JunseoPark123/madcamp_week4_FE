@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week4_fe.R
-import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.home.MarkerData
 
 class FavorAdapter(private var favorites: List<MarkerData>) : RecyclerView.Adapter<FavorAdapter.FavorViewHolder>() {
@@ -69,7 +68,6 @@ class FavorAdapter(private var favorites: List<MarkerData>) : RecyclerView.Adapt
 
         private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
             ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
-            ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
         }
     }
 

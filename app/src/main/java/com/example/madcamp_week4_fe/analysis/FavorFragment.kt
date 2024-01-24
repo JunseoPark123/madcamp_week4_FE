@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.madcamp_week4_fe.MainActivity
 import com.example.madcamp_week4_fe.R
 import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.home.MarkerData
@@ -25,13 +26,28 @@ class FavorFragment : Fragment() {
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_favor, container, false)
+
+        // RecyclerView와 SharedPreferences 초기화
         recyclerView = view.findViewById(R.id.favorRecycler)
         sharedPreferences = requireActivity().getSharedPreferences("Favorites", Context.MODE_PRIVATE)
 
+        // RecyclerView 설정
         setupRecyclerView()
 
+        // SharedPreferences 변경 리스너 등록
         sharedPreferences.registerOnSharedPreferenceChangeListener { _, _ ->
             refreshFavorites()
+        }
+
+        // MainActivity에서 제공하는 sharedViewModel 인스턴스 가져오기
+        val sharedViewModel = (activity as? MainActivity)?.sharedViewModel
+
+        // sharedViewModel의 LiveData를 관찰하여 즐겨찾기 상태 변화 감지
+        sharedViewModel?.favoritesUpdated?.observe(viewLifecycleOwner) { updated ->
+            if (updated) {
+                refreshFavorites()
+                sharedViewModel.setFavoritesUpdated(false) // 상태 초기화
+            }
         }
 
         return view
