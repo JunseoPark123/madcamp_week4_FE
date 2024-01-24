@@ -8,8 +8,8 @@ import kotlinx.android.parcel.Parcelize
 data class MarkerData(
     val position: LatLng,
     val galTitle: String,
-//    val galUrl: String,
-//    val galLocation: String,
-//    val galKeyword: String,
+    val galUrl: String,
+    val galLocation: String,
+    val galKeyword: String,
     // 기타 필요한 데이터
 ) : Parcelable

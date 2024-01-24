@@ -63,7 +63,12 @@ class HomeViewModel : ViewModel() {
                             withContext(Dispatchers.Main) {
                                 map.addMarker(markerOptions)
                                 // Store the marker data in markerDataList
-                                markerDataList.add(MarkerData(LatLng(it.latitude, it.longitude), galleryItem.galTitle))
+                                markerDataList.add(MarkerData(
+                                    LatLng(it.latitude, it.longitude),
+                                    galleryItem.galTitle,
+                                    galleryItem.galWebImageUrl,
+                                    galleryItem.galPhotographyLocation,
+                                    galleryItem.galSearchKeyword))
                             }
                         }
                     }

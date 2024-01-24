@@ -12,10 +12,14 @@ class MarkerPagerAdapter(
 ) : RecyclerView.Adapter<MarkerPagerAdapter.MarkerViewHolder>() {
 
     class MarkerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textViewTitle: TextView = itemView.findViewById(R.id.textViewTitle)
+        private val textViewTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        private val textViewLocation: TextView = itemView.findViewById(R.id.tvLocation)
+        private val textViewKeyword: TextView = itemView.findViewById(R.id.tvKeyword)
 
         fun bind(markerData: MarkerData) {
             textViewTitle.text = markerData.galTitle
+            textViewLocation.text = markerData.galLocation
+            textViewKeyword.text = markerData.galKeyword
         }
     }
 
@@ -26,7 +30,9 @@ class MarkerPagerAdapter(
 
     override fun onBindViewHolder(holder: MarkerViewHolder, position: Int) {
         val markerData = markerDataList[position]
-        holder.itemView.findViewById<TextView>(R.id.textViewTitle).text = markerData.galTitle
+        holder.itemView.findViewById<TextView>(R.id.tvTitle).text = markerData.galTitle
+        holder.itemView.findViewById<TextView>(R.id.tvLocation).text = markerData.galLocation
+        holder.itemView.findViewById<TextView>(R.id.tvKeyword).text = markerData.galKeyword
         // 여기에 추가적인 데이터 바인딩 로직 구현
     }
 
