@@ -4,17 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white">
+    android:background="@android:color/black">
 
-    <ProgressBar
-        android:id="@+id/loadingProgressBar"
+
+    <ImageView
+        android:id="@+id/loadingMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/loading"
+        android:scaleType="center"/>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_hor50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_hor30"
@@ -28,9 +34,11 @@
         android:id="@+id/tvLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="지도 다시 로딩 화면"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_hor30"
+        android:text="지도 불러오는 중"
+        android:textSize="32dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/jeongnimsaji_r"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_hor50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

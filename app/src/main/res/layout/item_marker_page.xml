@@ -35,7 +35,7 @@
         android:layout_marginStart="16dp"
         android:text="이름"
         android:textSize="48dp"
-        android:fontFamily="@font/seoulhangang_cb_regular"
+        android:fontFamily="@font/jeongnimsaji_b"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_hor50" />
@@ -48,7 +48,7 @@
         android:layout_marginTop="8dp"
         android:textSize="32dp"
         android:text="주소"
-        android:fontFamily="@font/seoulhangang_cb_regular"
+        android:fontFamily="@font/jeongnimsaji_r"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />

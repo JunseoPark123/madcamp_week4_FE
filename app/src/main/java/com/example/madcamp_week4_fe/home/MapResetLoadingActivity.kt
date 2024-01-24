@@ -6,12 +6,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.example.madcamp_week4_fe.R
 
 class MapResetLoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map_reset_loading)
+
+        val loadingImageView: ImageView = findViewById(R.id.loadingMap)
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.loading)
+            .into(loadingImageView)
 
         val shouldCloseImmediately = intent.getBooleanExtra("close", false)
         if (shouldCloseImmediately) {

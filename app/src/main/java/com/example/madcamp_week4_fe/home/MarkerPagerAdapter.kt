@@ -32,9 +32,11 @@ class MarkerPagerAdapter(
             textViewLocation.text = markerData.galLocation
 
             val ivFavor = itemView.findViewById<ImageView>(R.id.ivFavor)
+            val ivButton = itemView.findViewById<ImageView>(R.id.ivBtnBackground)
             val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
             val isFavorite = sharedPreferences.getBoolean(markerData.galTitle, false)
-            ivFavor.setImageResource(if (isFavorite) R.drawable.fillfavor else R.drawable.favor)
+            ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
+            ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
 
             itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
                 val newFavoriteStatus = !isFavorite
@@ -56,7 +58,8 @@ class MarkerPagerAdapter(
                     editor.remove(markerData.galTitle + "_lng")
                 }
                 editor.apply()
-                ivFavor.setImageResource(if (newFavoriteStatus) R.drawable.fillfavor else R.drawable.favor)
+                ivFavor.setImageResource(if (newFavoriteStatus) R.drawable.clickedfavor else R.drawable.favor)
+                ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
             }
 
             // URL 로그 출력
