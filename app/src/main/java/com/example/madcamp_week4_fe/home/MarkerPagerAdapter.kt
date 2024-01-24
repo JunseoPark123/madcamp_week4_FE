@@ -1,5 +1,6 @@
 package com.example.madcamp_week4_fe.home
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,17 @@ class MarkerPagerAdapter(
         fun bind(markerData: MarkerData) {
             textViewTitle.text = markerData.galTitle
             textViewLocation.text = markerData.galLocation
+
+            val ivFavor = itemView.findViewById<ImageView>(R.id.ivFavor)
+            val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
+            val isFavorite = sharedPreferences.getBoolean(markerData.galTitle, false)
+            ivFavor.setImageResource(if (isFavorite) R.drawable.fillfavor else R.drawable.favor)
+
+            itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
+                val newFavoriteStatus = !isFavorite
+                sharedPreferences.edit().putBoolean(markerData.galTitle, newFavoriteStatus).apply()
+                ivFavor.setImageResource(if (newFavoriteStatus) R.drawable.fillfavor else R.drawable.favor)
+            }
 
             // URL 로그 출력
             Log.d("MarkerPagerAdapter", "Loading image from URL: ${markerData.galUrl}")

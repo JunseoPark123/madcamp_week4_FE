@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.example.madcamp_week4_fe.analysis.AnalysisFragment
+import com.example.madcamp_week4_fe.analysis.FavorFragment
 import com.example.madcamp_week4_fe.databinding.ActivityMainBinding
 import com.example.madcamp_week4_fe.home.HomeFragment
 import com.example.madcamp_week4_fe.search.SearchFragment
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             when(item.itemId) {
                 R.id.heart -> setFragment(TAG_HEART, SearchFragment())
                 R.id.home -> setFragment(TAG_HOME, HomeFragment())
-                R.id.mypage -> setFragment(TAG_MYPAGE, AnalysisFragment())
+                R.id.mypage -> setFragment(TAG_MYPAGE, FavorFragment())
             }
             true
         }
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             when (tag) {
                 TAG_HEART -> SearchFragment()
                 TAG_HOME -> HomeFragment()
-                TAG_MYPAGE -> AnalysisFragment()
+                TAG_MYPAGE -> FavorFragment()
                 else -> HomeFragment()
             }
         }
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         setFragment(tag, when (tag) {
             TAG_HEART -> SearchFragment()
             TAG_HOME -> HomeFragment()
-            TAG_MYPAGE -> AnalysisFragment()
+            TAG_MYPAGE -> FavorFragment()
             else -> HomeFragment()
         })
         binding.navigationView.selectedItemId = when (tag) {
