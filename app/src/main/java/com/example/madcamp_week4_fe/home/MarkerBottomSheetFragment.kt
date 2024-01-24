@@ -16,6 +16,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var markerDataList: List<MarkerData>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            markerDataList = it.getParcelableArrayList<MarkerData>("markerDataList") ?: listOf()
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_marker_bottom_sheet, container, false)
         val viewPager: ViewPager2 = view.findViewById(R.id.viewPager)
@@ -25,8 +32,10 @@ class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: BottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+
         dialog.setOnShowListener {
             val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            bottomSheet.setBackgroundResource(R.drawable.rounded_corners) // Applying the rounded corners background
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
             val layoutParams = bottomSheet.layoutParams
             layoutParams.height = getBottomSheetDialogDefaultHeight()
@@ -50,10 +59,4 @@ class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            markerDataList = it.getParcelableArrayList<MarkerData>("markerDataList") ?: listOf()
-        }
-    }
 }

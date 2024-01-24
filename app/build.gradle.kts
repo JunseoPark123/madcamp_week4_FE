@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")
     implementation ("com.google.android.gms:play-services-location:17.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
