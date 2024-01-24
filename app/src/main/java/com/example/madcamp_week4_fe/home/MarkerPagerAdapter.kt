@@ -16,16 +16,20 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.madcamp_week4_fe.SharedViewModel
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 class MarkerPagerAdapter(
-    private val markerDataList: List<MarkerData>
+    private val markerDataList: List<MarkerData>,
+    private val sharedViewModel: SharedViewModel
 ) : RecyclerView.Adapter<MarkerPagerAdapter.MarkerViewHolder>() {
 
-    class MarkerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    inner class MarkerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageViewGallery: ImageView = itemView.findViewById(R.id.ivGallery)
         private val textViewTitle: TextView = itemView.findViewById(R.id.tvTitle)
         private val textViewLocation: TextView = itemView.findViewById(R.id.tvLocation)
+        //private val viewToBlur: View = itemView.findViewById(R.id.view)
 
         fun bind(markerData: MarkerData) {
             textViewTitle.text = markerData.galTitle
@@ -34,15 +38,16 @@ class MarkerPagerAdapter(
             val ivFavor = itemView.findViewById<ImageView>(R.id.ivFavor)
             val ivButton = itemView.findViewById<ImageView>(R.id.ivBtnBackground)
             val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
-            val isFavorite = sharedPreferences.getBoolean(markerData.galTitle, false)
-            ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
-            ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
+
+            // Update the favorite status every time bind is called
+            var isFavorite = sharedPreferences.getBoolean(markerData.galTitle, false)
+            updateFavoriteStatus(ivFavor, ivButton, isFavorite)
 
             itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
-                val newFavoriteStatus = !isFavorite
+                isFavorite = !isFavorite // Toggle the favorite status
                 val editor = sharedPreferences.edit()
-                editor.putBoolean(markerData.galTitle, newFavoriteStatus)
-                if (newFavoriteStatus) {
+                editor.putBoolean(markerData.galTitle, isFavorite)
+                if (isFavorite) {
                     // Save additional details when marked as favorite
                     editor.putString(markerData.galTitle + "_url", markerData.galUrl)
                     editor.putString(markerData.galTitle + "_location", markerData.galLocation)
@@ -58,11 +63,15 @@ class MarkerPagerAdapter(
                     editor.remove(markerData.galTitle + "_lng")
                 }
                 editor.apply()
-                ivFavor.setImageResource(if (newFavoriteStatus) R.drawable.clickedfavor else R.drawable.favor)
-                ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
+                updateFavoriteStatus(ivFavor, ivButton, isFavorite)
+                this@MarkerPagerAdapter.sharedViewModel.setFavoritesUpdated(true)
             }
+        
 
-            // URL 로그 출력
+
+
+
+        // URL 로그 출력
             Log.d("MarkerPagerAdapter", "Loading image from URL: ${markerData.galUrl}")
 
             // Glide를 사용하여 이미지를 ImageView에 로드합니다.
@@ -70,7 +79,7 @@ class MarkerPagerAdapter(
                 .load(markerData.galUrl)
                 .transform(
                     CenterCrop(),
-                    RoundedCornersTransformation(120, 0, RoundedCornersTransformation.CornerType.TOP)
+                    RoundedCornersTransformation(144, 0, RoundedCornersTransformation.CornerType.TOP)
                 )
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
@@ -84,7 +93,20 @@ class MarkerPagerAdapter(
                     }
                 })
                 .into(imageViewGallery)
+
+//            Blurry.with(itemView.context)
+//                .radius(10)
+//                .sampling(8)
+//                .async()
+//                .onto(viewToBlur as ViewGroup?)
+
         }
+
+        private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
+            ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
+            ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarkerViewHolder {
@@ -98,4 +120,6 @@ class MarkerPagerAdapter(
     }
 
     override fun getItemCount() = markerDataList.size
+
+
 }

@@ -19,5 +19,16 @@ interface LocationApiService {
     ): Call<GalleryResponse>
 
 
+    @GET("galleryList1")
+    fun getKeywordGalleryList(
+        @Query("serviceKey") serviceKey: String = URLDecoder.decode("6pV0A29OuVqdGtWqISMIRMBb6pYP1tNsoRedxnuuQK5zyhlzSGmtjOHfDfx979w56FJVwhfWxiRgsZRh61Dbfw%3D%3D", "UTF-8"),
+        @Query("numOfRows") numOfRows: Int = 3,
+        @Query("pageNo") pageNo: Int,
+        @Query("MobileOS") mobileOS: String = "AND",
+        @Query("MobileApp") mobileApp: String = "AppTest",
+        @Query("arrange") arrange: String = "A",
+        @Query("keyword") keyword: String,
+        @Query("_type") type: String = "json"
+    ): Call<GalleryResponse>
 
 }

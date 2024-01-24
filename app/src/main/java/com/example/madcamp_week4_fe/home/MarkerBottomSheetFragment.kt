@@ -6,30 +6,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import com.example.madcamp_week4_fe.MainActivity
 import com.example.madcamp_week4_fe.R
+import com.example.madcamp_week4_fe.SharedViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var markerDataList: List<MarkerData>
+    private var sharedViewModel: SharedViewModel? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             markerDataList = it.getParcelableArrayList<MarkerData>("markerDataList") ?: listOf()
         }
+
+        // MainActivity에서 전달된 sharedViewModel 받기
+        sharedViewModel = (activity as? MainActivity)?.sharedViewModel
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_marker_bottom_sheet, container, false)
         val viewPager: ViewPager2 = view.findViewById(R.id.viewPager)
-        viewPager.adapter = MarkerPagerAdapter(markerDataList)
+
+        // sharedViewModel을 MarkerPagerAdapter에 전달
+        viewPager.adapter = sharedViewModel?.let { MarkerPagerAdapter(markerDataList, it) }
+
         return view
     }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: BottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
 

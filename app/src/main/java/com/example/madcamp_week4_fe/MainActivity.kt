@@ -5,10 +5,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp_week4_fe.analysis.FavorFragment
 import com.example.madcamp_week4_fe.databinding.ActivityMainBinding
 import com.example.madcamp_week4_fe.home.HomeFragment
 import com.example.madcamp_week4_fe.search.SearchFragment
+import com.example.madcamp_week4_fe.SharedViewModel
 
 
 const val TAG_HEART = "heart_fragment"
@@ -16,13 +18,16 @@ const val TAG_HOME = "home_fragment"
 const val TAG_MYPAGE = "mypage_fragment"
 
 class MainActivity : AppCompatActivity() {
+    lateinit var sharedViewModel: SharedViewModel
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
         setFragment(TAG_HOME, HomeFragment())
         binding.navigationView.selectedItemId = R.id.home
@@ -41,23 +46,16 @@ class MainActivity : AppCompatActivity() {
         val manager: FragmentManager = supportFragmentManager
         val fragTransaction = manager.beginTransaction()
 
-        // 기존에 있는 프래그먼트를 찾거나 새로운 프래그먼트를 생성합니다.
         val currentFragment = manager.findFragmentByTag(tag)
-        val newFragment = if (currentFragment != null) {
-            currentFragment
-        } else {
-            when (tag) {
-                TAG_HEART -> SearchFragment()
-                TAG_HOME -> HomeFragment()
-                TAG_MYPAGE -> FavorFragment()
-                else -> HomeFragment()
-            }
+        val newFragment = currentFragment ?: when (tag) {
+            TAG_HEART -> SearchFragment()
+            TAG_HOME -> HomeFragment()
+            TAG_MYPAGE -> FavorFragment()
+            else -> HomeFragment()
         }
 
-        // 다른 프래그먼트를 숨깁니다.
         hideAllFragments(fragTransaction)
 
-        // 새 프래그먼트를 추가하거나 기존 프래그먼트를 보여줍니다.
         if (currentFragment == null) {
             fragTransaction.add(R.id.mainFrameLayout, newFragment, tag)
         } else {
@@ -91,4 +89,5 @@ class MainActivity : AppCompatActivity() {
             else -> R.id.home
         }
     }
+
 }
