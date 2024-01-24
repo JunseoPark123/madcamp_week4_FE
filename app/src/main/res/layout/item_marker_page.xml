@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- 여기에 페이지 내용 추가 -->
+
     <ImageView
         android:id="@+id/ivGallery"
         android:layout_width="match_parent"
@@ -12,13 +14,12 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/home" />
 
-    <!-- 여기에 페이지 내용 추가 -->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_hor50"
@@ -34,6 +35,7 @@
         android:layout_marginStart="16dp"
         android:text="이름"
         android:textSize="48dp"
+        android:fontFamily="@font/seoulhangang_cb_regular"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_hor50" />
@@ -46,10 +48,41 @@
         android:layout_marginTop="8dp"
         android:textSize="32dp"
         android:text="주소"
+        android:fontFamily="@font/seoulhangang_cb_regular"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
+    <ImageView
+        android:id="@+id/ivBtnBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_hor50"
+        app:srcCompat="@drawable/btnbackground" />
+
+    <ImageView
+        android:id="@+id/ivFavor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBtnBackground"
+        app:layout_constraintStart_toStartOf="@+id/ivBtnBackground"
+        app:layout_constraintTop_toTopOf="@+id/guideline_hor50"
+        app:srcCompat="@drawable/favor" />
+
+    <TextView
+        android:id="@+id/tvFavor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="button"
+        android:fontFamily="@font/seoulhangang_cb_regular"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBtnBackground"
+        app:layout_constraintEnd_toEndOf="@+id/ivBtnBackground"
+        app:layout_constraintStart_toEndOf="@+id/ivFavor"
+        app:layout_constraintTop_toTopOf="@+id/ivBtnBackground" />
 
 
     <!-- 기타 뷰 요소 추가 가능 -->
