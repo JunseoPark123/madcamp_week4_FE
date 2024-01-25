@@ -29,8 +29,6 @@ class MarkerPagerAdapter(
         private val imageViewGallery: ImageView = itemView.findViewById(R.id.ivGallery)
         private val textViewTitle: TextView = itemView.findViewById(R.id.tvTitle)
         private val textViewLocation: TextView = itemView.findViewById(R.id.tvLocation)
-        //private val viewToBlur: View = itemView.findViewById(R.id.view)
-
         fun bind(markerData: MarkerData) {
             textViewTitle.text = markerData.galTitle
             textViewLocation.text = markerData.galLocation
@@ -48,14 +46,16 @@ class MarkerPagerAdapter(
                 val editor = sharedPreferences.edit()
                 editor.putBoolean(markerData.galTitle, isFavorite)
                 if (isFavorite) {
-                    // Save additional details when marked as favorite
+                    // 선호로 설정
+                    editor.putBoolean(markerData.galTitle, true)
                     editor.putString(markerData.galTitle + "_url", markerData.galUrl)
                     editor.putString(markerData.galTitle + "_location", markerData.galLocation)
                     editor.putString(markerData.galTitle + "_keyword", markerData.galKeyword)
                     editor.putFloat(markerData.galTitle + "_lat", markerData.position.latitude.toFloat())
                     editor.putFloat(markerData.galTitle + "_lng", markerData.position.longitude.toFloat())
                 } else {
-                    // Remove saved details when unmarked as favorite
+                    // 선호 해제 - 모든 관련 데이터를 삭제
+                    editor.remove(markerData.galTitle)
                     editor.remove(markerData.galTitle + "_url")
                     editor.remove(markerData.galTitle + "_location")
                     editor.remove(markerData.galTitle + "_keyword")
@@ -66,7 +66,7 @@ class MarkerPagerAdapter(
                 updateFavoriteStatus(ivFavor, ivButton, isFavorite)
                 this@MarkerPagerAdapter.sharedViewModel.setFavoritesUpdated(true)
             }
-        
+
 
 
 
@@ -93,13 +93,6 @@ class MarkerPagerAdapter(
                     }
                 })
                 .into(imageViewGallery)
-
-//            Blurry.with(itemView.context)
-//                .radius(10)
-//                .sampling(8)
-//                .async()
-//                .onto(viewToBlur as ViewGroup?)
-
         }
 
         private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {

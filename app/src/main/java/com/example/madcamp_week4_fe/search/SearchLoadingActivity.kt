@@ -23,18 +23,14 @@ class SearchLoadingActivity : AppCompatActivity() {
 
         val shouldCloseImmediately = intent.getBooleanExtra("close", false)
         if (shouldCloseImmediately) {
-            Log.d("MapAddLoadingActivity", "Closing immediately")
             closeLoading()
         } else {
-            Log.d("MapAddLoadingActivity", "Waiting 5 seconds before closing")
-            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 7000) // 3 seconds delay
+            Handler(Looper.getMainLooper()).postDelayed({ closeLoading() }, 7000) // 7초 후 종료
         }
     }
 
     private fun closeLoading() {
-        setResult(Activity.RESULT_OK) // Set result
-        finish() // Finish Activity
+        setResult(Activity.RESULT_OK) // 결과 설정
+        finish() // Activity 종료
     }
-
-
 }

@@ -8,17 +8,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week4_fe.R
+import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.databinding.ItemSearchBinding
 import com.example.madcamp_week4_fe.home.MarkerData
 
 
-class SearchAdapter(private val items: MutableList<MarkerData>, private val context: Context) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
+class SearchAdapter(
+    private val items: MutableList<MarkerData>,
+    private val context: Context,
+    private val sharedViewModel: SharedViewModel
+) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
     class SearchViewHolder(private val binding: ItemSearchBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: MarkerData, context: Context) {
+        fun bind(item: MarkerData, context: Context, sharedViewModel: SharedViewModel) {
             binding.tvName.text = item.galTitle
-            binding.tvFavor.text = item.galLocation
+            binding.tvLocation.text = item.galLocation
 
             val ivFavor = itemView.findViewById<ImageView>(R.id.ivFavor)
             val ivButton = itemView.findViewById<ImageView>(R.id.ivBtnBackground)
@@ -30,17 +34,20 @@ class SearchAdapter(private val items: MutableList<MarkerData>, private val cont
 
             itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
                 isFavorite = !isFavorite // Toggle the favorite status
+                val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
                 val editor = sharedPreferences.edit()
-                editor.putBoolean(item.galTitle, isFavorite)
+
                 if (isFavorite) {
-                    // Save additional details when marked as favorite
+                    // 선호로 설정
+                    editor.putBoolean(item.galTitle, true)
                     editor.putString(item.galTitle + "_url", item.galUrl)
                     editor.putString(item.galTitle + "_location", item.galLocation)
                     editor.putString(item.galTitle + "_keyword", item.galKeyword)
                     editor.putFloat(item.galTitle + "_lat", item.position.latitude.toFloat())
                     editor.putFloat(item.galTitle + "_lng", item.position.longitude.toFloat())
                 } else {
-                    // Remove saved details when unmarked as favorite
+                    // 선호 해제 - 모든 관련 데이터를 삭제
+                    editor.remove(item.galTitle)
                     editor.remove(item.galTitle + "_url")
                     editor.remove(item.galTitle + "_location")
                     editor.remove(item.galTitle + "_keyword")
@@ -49,15 +56,14 @@ class SearchAdapter(private val items: MutableList<MarkerData>, private val cont
                 }
                 editor.apply()
                 updateFavoriteStatus(ivFavor, ivButton, isFavorite)
-                // this@SearchViewHolder 뒤에 sharedViewModel을 추가해야 할 것으로 보입니다.
-                // sharedViewModel을 가져와서 사용하는 방법을 참고하여 추가하십시오.
+                sharedViewModel.setFavoritesUpdated(true)
+
             }
         }
 
         // 임시로 빈 메서드로 정의
         private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
             ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
-            ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
         }
 
     }
@@ -69,7 +75,7 @@ class SearchAdapter(private val items: MutableList<MarkerData>, private val cont
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val item = items[position]
-        holder.bind(item, context)
+        holder.bind(item, context, sharedViewModel)
     }
 
     override fun getItemCount() = items.size

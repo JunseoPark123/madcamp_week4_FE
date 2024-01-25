@@ -20,9 +20,16 @@ class FavorFragment : Fragment() {
     private lateinit var favorAdapter: FavorAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedViewModel: SharedViewModel
 
     private val sharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         refreshFavorites() // 즐겨찾기가 변경될 때 UI 업데이트
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ViewModel 초기화
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_favor, container, false)
@@ -35,15 +42,10 @@ class FavorFragment : Fragment() {
         setupRecyclerView()
 
         // SharedPreferences 변경 리스너 등록
-        sharedPreferences.registerOnSharedPreferenceChangeListener { _, _ ->
-            refreshFavorites()
-        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
 
-        // MainActivity에서 제공하는 sharedViewModel 인스턴스 가져오기
-        val sharedViewModel = (activity as? MainActivity)?.sharedViewModel
-
-        // sharedViewModel의 LiveData를 관찰하여 즐겨찾기 상태 변화 감지
-        sharedViewModel?.favoritesUpdated?.observe(viewLifecycleOwner) { updated ->
+        // sharedViewModel의 LiveData 관찰
+        sharedViewModel.favoritesUpdated.observe(viewLifecycleOwner) { updated ->
             if (updated) {
                 refreshFavorites()
                 sharedViewModel.setFavoritesUpdated(false) // 상태 초기화
@@ -58,7 +60,7 @@ class FavorFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        favorAdapter = FavorAdapter(loadFavorites())
+        favorAdapter = FavorAdapter(loadFavorites(), sharedViewModel)
         recyclerView.adapter = favorAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
     }

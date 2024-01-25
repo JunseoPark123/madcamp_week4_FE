@@ -19,7 +19,7 @@ interface LocationApiService {
     ): Call<GalleryResponse>
 
 
-    @GET("galleryList1")
+    @GET("gallerySearchList1")
     fun getKeywordGalleryList(
         @Query("serviceKey") serviceKey: String = URLDecoder.decode("6pV0A29OuVqdGtWqISMIRMBb6pYP1tNsoRedxnuuQK5zyhlzSGmtjOHfDfx979w56FJVwhfWxiRgsZRh61Dbfw%3D%3D", "UTF-8"),
         @Query("numOfRows") numOfRows: Int = 3,

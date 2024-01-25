@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week4_fe.R
+import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.home.MarkerData
 
-class FavorAdapter(private var favorites: List<MarkerData>) : RecyclerView.Adapter<FavorAdapter.FavorViewHolder>() {
-
+class FavorAdapter(private var favorites: List<MarkerData>,
+                   private val sharedViewModel: SharedViewModel
+) : RecyclerView.Adapter<FavorAdapter.FavorViewHolder>() {
     inner class FavorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(markerData: MarkerData) {
             itemView.findViewById<TextView>(R.id.tvName).text = markerData.galTitle
@@ -48,14 +50,18 @@ class FavorAdapter(private var favorites: List<MarkerData>) : RecyclerView.Adapt
         private fun toggleFavoriteStatus(markerData: MarkerData, ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
             val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
-            editor.putBoolean(markerData.galTitle, isFavorite)
+
             if (isFavorite) {
+                // 선호로 설정
+                editor.putBoolean(markerData.galTitle, true)
                 editor.putString(markerData.galTitle + "_url", markerData.galUrl)
                 editor.putString(markerData.galTitle + "_location", markerData.galLocation)
                 editor.putString(markerData.galTitle + "_keyword", markerData.galKeyword)
                 editor.putFloat(markerData.galTitle + "_lat", markerData.position.latitude.toFloat())
                 editor.putFloat(markerData.galTitle + "_lng", markerData.position.longitude.toFloat())
             } else {
+                // 선호 해제 - 모든 관련 데이터를 삭제
+                editor.remove(markerData.galTitle)
                 editor.remove(markerData.galTitle + "_url")
                 editor.remove(markerData.galTitle + "_location")
                 editor.remove(markerData.galTitle + "_keyword")
@@ -64,6 +70,7 @@ class FavorAdapter(private var favorites: List<MarkerData>) : RecyclerView.Adapt
             }
             editor.apply()
             updateFavoriteStatus(ivFavor, ivButton, isFavorite)
+            sharedViewModel.setFavoritesUpdated(true)
         }
 
         private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
