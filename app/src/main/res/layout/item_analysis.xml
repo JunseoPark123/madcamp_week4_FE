@@ -66,7 +66,7 @@
         android:text="주소"
         android:textColor="@color/white"
         android:textSize="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivBtnBackground1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
@@ -102,6 +102,37 @@
         app:layout_constraintEnd_toEndOf="@+id/ivBtnBackground"
         app:layout_constraintStart_toEndOf="@+id/ivFavor"
         app:layout_constraintTop_toTopOf="@+id/ivBtnBackground" />
+
+    <ImageView
+        android:id="@+id/ivBtnBackground1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/btnbackground"
+        tools:layout_editor_absoluteX="295dp"
+        tools:layout_editor_absoluteY="511dp" />
+
+    <ImageView
+        android:id="@+id/ivAnalysis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBtnBackground1"
+        app:layout_constraintStart_toStartOf="@+id/ivBtnBackground1"
+        app:layout_constraintTop_toTopOf="@+id/ivBtnBackground1"
+        app:srcCompat="@drawable/detail" />
+
+    <TextView
+        android:id="@+id/tvAnalysis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="자세히보기"
+        android:fontFamily="@font/seoulhangang_cb_regular"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBtnBackground1"
+        app:layout_constraintEnd_toEndOf="@+id/ivBtnBackground1"
+        app:layout_constraintStart_toEndOf="@+id/ivAnalysis"
+        app:layout_constraintTop_toTopOf="@+id/ivBtnBackground1" />
+
 
 
     <!-- 기타 뷰 요소 추가 가능 -->
