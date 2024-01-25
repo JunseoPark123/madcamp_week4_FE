@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp_week4_fe.R
 import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.home.MarkerData
+import com.example.madcamp_week4_fe.interfaces.OnItemClickedListener
 
 class FavorAdapter(private var favorites: List<MarkerData>,
-                   private val sharedViewModel: SharedViewModel
+                   private val sharedViewModel: SharedViewModel,
+                   private val listener: OnItemClickedListener
 ) : RecyclerView.Adapter<FavorAdapter.FavorViewHolder>() {
     inner class FavorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(markerData: MarkerData) {
@@ -33,6 +35,10 @@ class FavorAdapter(private var favorites: List<MarkerData>,
                 } else {
                     toggleFavoriteStatus(markerData, ivFavor, ivButton, true)
                 }
+            }
+
+            itemView.setOnClickListener {
+                listener.onItemClicked(markerData)
             }
         }
 
@@ -71,6 +77,7 @@ class FavorAdapter(private var favorites: List<MarkerData>,
             editor.apply()
             updateFavoriteStatus(ivFavor, ivButton, isFavorite)
             sharedViewModel.setFavoritesUpdated(true)
+
         }
 
         private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {

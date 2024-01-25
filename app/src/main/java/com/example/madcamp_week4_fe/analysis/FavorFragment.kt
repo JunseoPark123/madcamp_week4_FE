@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.madcamp_week4_fe.MainActivity
 import com.example.madcamp_week4_fe.R
 import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.home.MarkerData
+import com.example.madcamp_week4_fe.interfaces.OnItemClickedListener
 import com.google.android.gms.maps.model.LatLng
 
-class FavorFragment : Fragment() {
+class FavorFragment : Fragment(), OnItemClickedListener {
     private lateinit var favorAdapter: FavorAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var sharedPreferences: SharedPreferences
@@ -60,11 +60,10 @@ class FavorFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        favorAdapter = FavorAdapter(loadFavorites(), sharedViewModel)
+        favorAdapter = FavorAdapter(loadFavorites(), sharedViewModel, this) // Pass 'this' as the listener
         recyclerView.adapter = favorAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
-
     private fun refreshFavorites() {
         val newFavorites = loadFavorites()
         favorAdapter.updateData(newFavorites)
@@ -74,6 +73,12 @@ class FavorFragment : Fragment() {
         // 리스너 해제
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
+    override fun onItemClicked(markerData: MarkerData) {
+        // Show the AnalysisBottomSheetFragment
+        val bottomSheetFragment = AnalysisBottomSheetFragment.newInstance(listOf(markerData))
+        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
+    }
+
 
 
     private fun loadFavorites(): List<MarkerData> {

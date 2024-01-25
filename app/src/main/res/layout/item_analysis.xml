@@ -107,9 +107,11 @@
         android:id="@+id/ivBtnBackground1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/btnbackground"
-        tools:layout_editor_absoluteX="295dp"
-        tools:layout_editor_absoluteY="511dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivBtnBackground"
+        app:srcCompat="@drawable/btnbackground" />
 
     <ImageView
         android:id="@+id/ivAnalysis"
