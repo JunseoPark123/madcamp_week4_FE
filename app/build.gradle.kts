@@ -48,6 +48,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.mlkit:image-labeling:17.0.7")
     implementation("jp.wasabeef:blurry:4.0.0")
     implementation("jp.wasabeef:glide-transformations:4.3.0")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")

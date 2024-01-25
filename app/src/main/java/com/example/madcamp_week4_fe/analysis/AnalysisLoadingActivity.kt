@@ -21,7 +21,7 @@ class AnalysisLoadingActivity : AppCompatActivity() {
         val loadingImageView: ImageView = findViewById(R.id.loadingMap)
         Glide.with(this)
             .asGif()
-            .load(R.drawable.loading)
+            .load(R.drawable.loading3)
             .into(loadingImageView)
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000) // 5초 딜레이

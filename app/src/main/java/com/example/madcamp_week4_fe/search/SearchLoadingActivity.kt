@@ -18,7 +18,7 @@ class SearchLoadingActivity : AppCompatActivity() {
         val loadingImageView: ImageView = findViewById(R.id.loadingMap)
         Glide.with(this)
             .asGif()
-            .load(R.drawable.loading)
+            .load(R.drawable.loading2)
             .into(loadingImageView)
 
         val shouldCloseImmediately = intent.getBooleanExtra("close", false)
