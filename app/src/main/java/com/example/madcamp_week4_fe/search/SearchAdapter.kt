@@ -11,18 +11,21 @@ import com.example.madcamp_week4_fe.R
 import com.example.madcamp_week4_fe.SharedViewModel
 import com.example.madcamp_week4_fe.databinding.ItemSearchBinding
 import com.example.madcamp_week4_fe.home.MarkerData
+import com.example.madcamp_week4_fe.interfaces.OnItemClickedListener
 
 
 class SearchAdapter(
     private val items: MutableList<MarkerData>,
+    private val listener: OnItemClickedListener,
     private val context: Context,
     private val sharedViewModel: SharedViewModel
 ) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
     class SearchViewHolder(private val binding: ItemSearchBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MarkerData, context: Context, sharedViewModel: SharedViewModel) {
+        fun bind(item: MarkerData, listener: OnItemClickedListener, context: Context, sharedViewModel: SharedViewModel) {
             binding.tvName.text = item.galTitle
             binding.tvLocation.text = item.galLocation
+
 
             val ivFavor = itemView.findViewById<ImageView>(R.id.ivFavor)
             val ivButton = itemView.findViewById<ImageView>(R.id.ivBtnBackground)
@@ -31,6 +34,12 @@ class SearchAdapter(
             // Update the favorite status every time bind is called
             var isFavorite = sharedPreferences.getBoolean(item.galTitle, false)
             updateFavoriteStatus(ivFavor, ivButton, isFavorite)
+
+            // 클릭 리스너 설정
+            itemView.setOnClickListener {
+                Log.d("SearchAdapter", "Item clicked: ${item.galTitle}")
+                listener.onItemClicked(item)
+            }
 
             itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
                 isFavorite = !isFavorite // Toggle the favorite status
@@ -58,6 +67,10 @@ class SearchAdapter(
                 updateFavoriteStatus(ivFavor, ivButton, isFavorite)
                 sharedViewModel.setFavoritesUpdated(true)
 
+                itemView.setOnClickListener {
+                    listener.onItemClicked(item)
+                }
+
             }
         }
 
@@ -75,7 +88,7 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val item = items[position]
-        holder.bind(item, context, sharedViewModel)
+        holder.bind(item, listener, context, sharedViewModel)
     }
 
     override fun getItemCount() = items.size

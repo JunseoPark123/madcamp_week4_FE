@@ -26,6 +26,14 @@ class MarkerBottomSheetFragment : BottomSheetDialogFragment() {
             markerDataList = it.getParcelableArrayList<MarkerData>("markerDataList") ?: listOf()
         }
 
+        sharedViewModel?.favoritesUpdated?.observe(this) { updated ->
+            if (updated) {
+                // Code to update the UI or perform actions based on updated favorites
+                // This might include refreshing the data in MarkerPagerAdapter
+                sharedViewModel?.setFavoritesUpdated(false)
+            }
+        }
+
         // MainActivity에서 전달된 sharedViewModel 받기
         sharedViewModel = (activity as? MainActivity)?.sharedViewModel
     }

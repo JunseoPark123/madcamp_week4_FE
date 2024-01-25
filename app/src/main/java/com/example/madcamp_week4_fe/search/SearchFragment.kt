@@ -16,8 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp_week4_fe.SharedViewModel
+import com.example.madcamp_week4_fe.home.MarkerBottomSheetFragment
 import com.example.madcamp_week4_fe.home.MarkerData
 import com.example.madcamp_week4_fe.interfaces.LocationInfoApi
+import com.example.madcamp_week4_fe.interfaces.OnItemClickedListener
 import com.example.madcamp_week4_fe.models.Item
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), OnItemClickedListener {
 
     private lateinit var binding: FragmentSearchBinding
     private val searchInfoItems = mutableListOf<MarkerData>()
@@ -35,7 +37,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -51,6 +53,14 @@ class SearchFragment : Fragment() {
             searchWithKeyword()
         }
 
+        sharedViewModel.favoritesUpdated.observe(viewLifecycleOwner) { updated ->
+            if (updated) {
+                // Code to refresh search results based on updated favorites
+                // For example: re-fetch search results or update UI
+                sharedViewModel.setFavoritesUpdated(false)
+            }
+        }
+
         return binding.root
     }
 
@@ -62,11 +72,11 @@ class SearchFragment : Fragment() {
             // 필요한 추가 작업 수행
         }
     }
+
     private fun startSearchLoadingActivity() {
         val intent = Intent(context, SearchLoadingActivity::class.java)
         searchLoadingActivityResultLauncher.launch(intent)
     }
-
 
 
     private fun searchWithKeyword() {
@@ -108,9 +118,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        searchInfoAdapter = SearchAdapter(searchInfoItems, requireContext(), sharedViewModel)
+        searchInfoAdapter = SearchAdapter(searchInfoItems, this, requireContext(), sharedViewModel)
         binding.recyclerView.adapter = searchInfoAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    override fun onItemClicked(markerData: MarkerData) {
+        // 클릭된 아이템에 해당하는 BottomSheetFragment 표시
+        val bottomSheetFragment = MarkerBottomSheetFragment.newInstance(listOf(markerData))
+        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
     }
 
     private fun updateUI(items: List<Item>) {
