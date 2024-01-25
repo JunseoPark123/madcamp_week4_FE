@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".analysis.AnalysisLoadingActivity"
             android:exported="false" />
         <activity
@@ -31,12 +34,6 @@
             android:name=".home.MapAddLoadingActivity"
             android:exported="false" />
         <activity
-            android:name=".ready.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ready.LoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".home.MapResetLoadingActivity"
             android:exported="false" />
 
@@ -45,10 +42,7 @@
             android:value="AIzaSyB8NCOlYUBOtRcq8tToYdht5b-lhWpwbjM" />
 
         <activity
-            android:name=".search.GalleryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
