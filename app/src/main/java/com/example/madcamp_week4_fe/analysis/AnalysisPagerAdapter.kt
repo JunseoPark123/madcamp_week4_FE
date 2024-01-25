@@ -1,6 +1,7 @@
 package com.example.madcamp_week4_fe.analysis
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -66,6 +67,18 @@ class AnalysisPagerAdapter(
                 editor.apply()
                 updateFavoriteStatus(ivFavor, ivButton, isFavorite)
                 this@AnalysisPagerAdapter.sharedViewModel.setFavoritesUpdated(true)
+            }
+
+            itemView.findViewById<ImageView>(R.id.ivBtnBackground1).setOnClickListener {
+                val context = itemView.context
+                val intent = Intent(context, AnalysisActivity::class.java)
+                // Optionally, pass data to AnalysisActivity using intent.putExtra()
+                // For example: intent.putExtra("extra_data", markerData.someField)
+                intent.putExtra("title", markerData.galTitle)
+                intent.putExtra("latitude", markerData.position.latitude.toFloat())
+                intent.putExtra("longitude", markerData.position.longitude.toFloat())
+
+                context.startActivity(intent)
             }
 
 
