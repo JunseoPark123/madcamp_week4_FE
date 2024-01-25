@@ -2,6 +2,7 @@ package com.example.madcamp_week4_fe.search
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,59 +27,54 @@ class SearchAdapter(
             binding.tvName.text = item.galTitle
             binding.tvLocation.text = item.galLocation
 
-
             val ivFavor = itemView.findViewById<ImageView>(R.id.ivFavor)
             val ivButton = itemView.findViewById<ImageView>(R.id.ivBtnBackground)
             val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
 
-            // Update the favorite status every time bind is called
+            // 선호 상태 확인 및 UI 업데이트
             var isFavorite = sharedPreferences.getBoolean(item.galTitle, false)
             updateFavoriteStatus(ivFavor, ivButton, isFavorite)
 
             // 클릭 리스너 설정
             itemView.setOnClickListener {
-                Log.d("SearchAdapter", "Item clicked: ${item.galTitle}")
                 listener.onItemClicked(item)
             }
 
-            itemView.findViewById<ImageView>(R.id.ivBtnBackground).setOnClickListener {
-                isFavorite = !isFavorite // Toggle the favorite status
-                val sharedPreferences = itemView.context.getSharedPreferences("Favorites", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-
-                if (isFavorite) {
-                    // 선호로 설정
-                    editor.putBoolean(item.galTitle, true)
-                    editor.putString(item.galTitle + "_url", item.galUrl)
-                    editor.putString(item.galTitle + "_location", item.galLocation)
-                    editor.putString(item.galTitle + "_keyword", item.galKeyword)
-                    editor.putFloat(item.galTitle + "_lat", item.position.latitude.toFloat())
-                    editor.putFloat(item.galTitle + "_lng", item.position.longitude.toFloat())
-                } else {
-                    // 선호 해제 - 모든 관련 데이터를 삭제
-                    editor.remove(item.galTitle)
-                    editor.remove(item.galTitle + "_url")
-                    editor.remove(item.galTitle + "_location")
-                    editor.remove(item.galTitle + "_keyword")
-                    editor.remove(item.galTitle + "_lat")
-                    editor.remove(item.galTitle + "_lng")
-                }
-                editor.apply()
+            ivButton.setOnClickListener {
+                isFavorite = !isFavorite // 선호 상태 토글
+                updateFavoriteStatusInSharedPreferences(sharedPreferences, item, isFavorite)
                 updateFavoriteStatus(ivFavor, ivButton, isFavorite)
                 sharedViewModel.setFavoritesUpdated(true)
-
-                itemView.setOnClickListener {
-                    listener.onItemClicked(item)
-                }
-
             }
         }
 
-        // 임시로 빈 메서드로 정의
-        private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
-            ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
+        private fun updateFavoriteStatusInSharedPreferences(sharedPreferences: SharedPreferences, item: MarkerData, isFavorite: Boolean) {
+            val editor = sharedPreferences.edit()
+            if (isFavorite) {
+                // 선호로 설정
+                editor.putBoolean(item.galTitle, true)
+                editor.putString(item.galTitle + "_url", item.galUrl)
+                editor.putString(item.galTitle + "_location", item.galLocation)
+                editor.putString(item.galTitle + "_keyword", item.galKeyword)
+                editor.putFloat(item.galTitle + "_lat", item.position.latitude.toFloat())
+                editor.putFloat(item.galTitle + "_lng", item.position.longitude.toFloat())
+                editor.apply()
+            } else {
+                // 선호 해제
+                editor.remove(item.galTitle)
+                editor.remove(item.galTitle + "_url")
+                editor.remove(item.galTitle + "_location")
+                editor.remove(item.galTitle + "_keyword")
+                editor.remove(item.galTitle + "_lat")
+                editor.remove(item.galTitle + "_lng")
+                editor.apply()
+            }
         }
 
+        private fun updateFavoriteStatus(ivFavor: ImageView, ivButton: ImageView, isFavorite: Boolean) {
+            ivFavor.setImageResource(if (isFavorite) R.drawable.clickedfavor else R.drawable.favor)
+            ivButton.setImageResource(if (isFavorite) R.drawable.btnclickedbackground else R.drawable.btnbackground)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {

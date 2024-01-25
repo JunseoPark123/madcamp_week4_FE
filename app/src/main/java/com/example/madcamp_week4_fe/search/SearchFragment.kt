@@ -51,9 +51,7 @@ class SearchFragment : Fragment(), OnItemClickedListener {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         setupRecyclerView()
@@ -70,13 +68,22 @@ class SearchFragment : Fragment(), OnItemClickedListener {
 
         sharedViewModel.favoritesUpdated.observe(viewLifecycleOwner) { updated ->
             if (updated) {
-                // Code to refresh search results based on updated favorites
-                // For example: re-fetch search results or update UI
+                refreshSearchResults()
                 sharedViewModel.setFavoritesUpdated(false)
             }
         }
-
         return binding.root
+    }
+
+    private fun refreshSearchResults() {
+        // SharedPreferences에서 선호 상태를 확인하고 어댑터에 반영
+        val sharedPreferences = requireActivity().getSharedPreferences("Favorites", Context.MODE_PRIVATE)
+        searchInfoItems.forEach { item ->
+            val isFavorite = sharedPreferences.getBoolean(item.galTitle, false)
+            // 'isFavorite' 상태에 따라 아이템 뷰 업데이트
+            val index = searchInfoItems.indexOf(item)
+            searchInfoAdapter.notifyItemChanged(index)
+        }
     }
 
     private fun openGalleryForImage() {
@@ -108,7 +115,7 @@ class SearchFragment : Fragment(), OnItemClickedListener {
                     // Google Cloud Translation API를 사용하여 번역
                     val keyword = translateToKorean(text)
                     startSearchLoadingActivity()
-                    searchWithKeyword(text)
+                    searchWithKeyword(keyword)
                 }
             }
             .addOnFailureListener { e ->
