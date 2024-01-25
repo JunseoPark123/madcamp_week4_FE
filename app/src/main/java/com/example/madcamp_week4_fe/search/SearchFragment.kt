@@ -23,6 +23,9 @@ import com.example.madcamp_week4_fe.interfaces.LocationInfoApi
 import com.example.madcamp_week4_fe.interfaces.OnItemClickedListener
 import com.example.madcamp_week4_fe.models.Item
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,17 +99,28 @@ class SearchFragment : Fragment(), OnItemClickedListener {
 
         labeler.process(image)
             .addOnSuccessListener { labels ->
-                for (label in labels) {
+                val firstLabel = labels.firstOrNull()
+                firstLabel?.let { label ->
                     val text = label.text
                     val confidence = label.confidence
                     Log.d("MLKit Labels", "Label: $text, Confidence: $confidence")
-                    // 키워드를 사용하는 로직 추가
+
+                    // Google Cloud Translation API를 사용하여 번역
+                    val keyword = translateToKorean(text)
+                    startSearchLoadingActivity()
+                    searchWithKeyword(text)
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("MLKit Labels", "Error processing image", e)
             }
     }
+
+    private fun translateToKorean(text: String): String {
+        // 입력된 text에 관계없이 항상 "노을"을 반환합니다.
+        return "노을"
+    }
+
 
     private val searchLoadingActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()

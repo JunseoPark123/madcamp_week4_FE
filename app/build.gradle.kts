@@ -48,6 +48,8 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-ml-natural-language:22.0.0")
+    implementation("com.google.firebase:firebase-ml-natural-language-translate-model:20.0.8")
     implementation ("com.google.mlkit:image-labeling:17.0.7")
     implementation("jp.wasabeef:blurry:4.0.0")
     implementation("jp.wasabeef:glide-transformations:4.3.0")
